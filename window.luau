@@ -157,9 +157,8 @@ local function level(role: string, v: number): string
 	return role .. (v >= 0.9 and "-hot" or (v >= 0.75 and "-warm" or "")) .. bucket(v)
 end
 
-local SPARK_LEN = 24
+local SPARK_LEN = 60
 local SPARK_EVERY = 4
-local SPARK_GLYPHS = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
 local spark_hist: { [string]: { number } } = {}
 local spark_tick = 0
 
@@ -176,12 +175,27 @@ local function spark_push(key: string, v: number)
 end
 
 local function spark(key: string): StatusSegment
-	local h = spark_hist[key] or {}
-	local parts = table.create(SPARK_LEN, " ")
-	for i, v in ipairs(h) do
-		parts[SPARK_LEN - #h + i] = SPARK_GLYPHS[math.clamp(math.floor(v * 7 + 0.5) + 1, 1, 8)]
+	return { text = " ", tone = "spark-" .. key }
+end
+
+local function spark_css()
+	local rules = {}
+	for key, h in pairs(spark_hist) do
+		local imgs, sizes, poss = {}, {}, {}
+		local n = #h
+		for i, v in ipairs(h) do
+			local slot = SPARK_LEN - n + i - 1
+			table.insert(imgs, "linear-gradient(var(--spark-c), var(--spark-c))")
+			table.insert(sizes, string.format("%.3f%% %.1f%%", 100 / SPARK_LEN * 0.82, math.max(v * 100, 4)))
+			table.insert(poss, string.format("%.3f%% 100%%", slot * 100 / (SPARK_LEN - 1)))
+		end
+		if n > 0 then
+			table.insert(rules, string.format(
+				"html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='spark-%s'] { background-image: %s, linear-gradient(var(--spark-track), var(--spark-track)) !important; background-size: %s, 100%% 1px !important; background-position: %s, 0 100%% !important; }",
+				key, table.concat(imgs, ", "), table.concat(sizes, ", "), table.concat(poss, ", ")))
+		end
 	end
-	return { text = table.concat(parts), tone = "spark-" .. key }
+	tern.css("sparks", table.concat(rules, "\n"))
 end
 
 local function human(bytes: number): string
@@ -241,6 +255,7 @@ local function sample()
 			spark_push("gpu", g)
 			spark_push("vram", v)
 		end
+		spark_css()
 	end
 	local out: { StatusSegment } = {
 		{ text = os.date("%H:%M:%S") :: string, tone = "time" },
