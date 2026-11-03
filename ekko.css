@@ -85,10 +85,10 @@ html.tn-status footer#statusline > span.sl-n {
 }
 
 html.tn-status footer#statusline > span.tn-git {
-	font-size: 9px !important;
-	letter-spacing: 0.18em !important;
+	font-size: 10.5px !important;
+	letter-spacing: 0.12em !important;
 	line-height: 1.7 !important;
-	color: var(--t4) !important;
+	color: var(--t3) !important;
 	text-align: center !important;
 	justify-content: center !important;
 }
@@ -105,11 +105,11 @@ html.tn-status footer#statusline > span.sl-plugins {
 
 /* The session, set as a section label: it names everything under it. */
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-plugin='arc-sidebar'] {
-	font-size: 9px !important;
-	letter-spacing: 0.28em !important;
+	font-size: 10.5px !important;
+	letter-spacing: 0.16em !important;
 	line-height: 1.7 !important;
 	text-transform: uppercase !important;
-	color: var(--t4) !important;
+	color: var(--t3) !important;
 	text-align: center !important;
 	padding-bottom: 14px !important;
 }
@@ -155,10 +155,10 @@ html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='t
 }
 
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='date'] {
-	font-size: 9px !important;
-	letter-spacing: 0.34em !important;
+	font-size: 11px !important;
+	letter-spacing: 0.22em !important;
 	line-height: 1.6 !important;
-	color: var(--t4) !important;
+	color: var(--t3) !important;
 	text-align: center !important;
 	padding: 7px 0 26px !important;
 }
@@ -169,7 +169,6 @@ html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='
 	padding-top: 18px !important;
 }
 
-/* Readings: label left, figure right, the gauge painted under both. */
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='m-'] {
 	display: flex !important;
 	justify-content: space-between !important;
@@ -180,21 +179,27 @@ html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='
 	font-variant-numeric: tabular-nums !important;
 	color: var(--t1) !important;
 	text-align: left !important;
-	padding-bottom: 9px !important;
-	margin-bottom: 14px !important;
-	--track: rgb(from var(--t1) r g b / 14%);
-	--fillc: var(--accent-ink);
-	background-image: linear-gradient(var(--fillc), var(--fillc)),
-		linear-gradient(var(--track), var(--track)) !important;
-	background-size: var(--p, 0%) 4px, 100% 4px !important;
-	background-position: left bottom, left bottom !important;
-	background-repeat: no-repeat !important;
+	padding-bottom: 2px !important;
+	margin-bottom: 0 !important;
+}
+
+html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='spark-'] {
+	display: block !important;
+	width: 100% !important;
+	font-size: 17px !important;
+	line-height: 1 !important;
+	letter-spacing: 0 !important;
+	white-space: pre !important;
+	overflow: hidden !important;
+	color: var(--accent-ink) !important;
+	opacity: 0.8 !important;
+	margin-bottom: 18px !important;
 }
 
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='m-']::before {
-	font-size: 8.5px !important;
-	letter-spacing: 0.22em !important;
-	color: var(--t4) !important;
+	font-size: 11px !important;
+	letter-spacing: 0.14em !important;
+	color: var(--t3) !important;
 	padding-bottom: 4px !important;
 }
 
@@ -231,8 +236,8 @@ html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone$='
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='m-net'],
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone^='m-load'] {
 	background-image: none !important;
-	font-size: 11px !important;
-	color: var(--t3) !important;
+	font-size: 12.5px !important;
+	color: var(--t2) !important;
 	padding: 12px 0 0 !important;
 	margin-bottom: 0 !important;
 	border-top: 1px solid var(--l2, rgba(127, 127, 127, 0.2)) !important;

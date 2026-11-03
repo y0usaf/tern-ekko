@@ -157,6 +157,33 @@ local function level(role: string, v: number): string
 	return role .. (v >= 0.9 and "-hot" or (v >= 0.75 and "-warm" or "")) .. bucket(v)
 end
 
+local SPARK_LEN = 24
+local SPARK_EVERY = 4
+local SPARK_GLYPHS = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+local spark_hist: { [string]: { number } } = {}
+local spark_tick = 0
+
+local function spark_push(key: string, v: number)
+	local h = spark_hist[key]
+	if not h then
+		h = {}
+		spark_hist[key] = h
+	end
+	table.insert(h, math.clamp(v, 0, 1))
+	while #h > SPARK_LEN do
+		table.remove(h, 1)
+	end
+end
+
+local function spark(key: string): StatusSegment
+	local h = spark_hist[key] or {}
+	local parts = table.create(SPARK_LEN, " ")
+	for i, v in ipairs(h) do
+		parts[SPARK_LEN - #h + i] = SPARK_GLYPHS[math.clamp(math.floor(v * 7 + 0.5) + 1, 1, 8)]
+	end
+	return { text = table.concat(parts), tone = "spark-" .. key }
+end
+
 local function human(bytes: number): string
 	if bytes >= 1048576 then
 		return string.format("%.1fM", bytes / 1048576)
@@ -202,18 +229,32 @@ local function sample()
 	end
 	net_prev = { rx, tx }
 
+	local util, gused, gtotal, temp = gpu_line:match("(%d+),%s*(%d+),%s*(%d+),%s*(%d+)")
+	local g = util and (tonumber(util) :: number) / 100 or nil
+	local v = util and (tonumber(gused) :: number) / (tonumber(gtotal) :: number) or nil
+	spark_tick += 1
+	if spark_tick >= SPARK_EVERY or not spark_hist.cpu then
+		spark_tick = 0
+		spark_push("cpu", cpu)
+		spark_push("mem", mshare)
+		if g and v then
+			spark_push("gpu", g)
+			spark_push("vram", v)
+		end
+	end
 	local out: { StatusSegment } = {
 		{ text = os.date("%H:%M:%S") :: string, tone = "time" },
 		{ text = string.upper(os.date("%a %d %b") :: string), tone = "date" },
 		{ text = string.format("%d%%", math.floor(cpu * 100 + 0.5)), tone = level("m-cpu", cpu) },
+		spark("cpu"),
 		{ text = string.format("%.0f/%.0fG", used / 1048576, mtotal / 1048576), tone = level("m-mem", mshare) },
+		spark("mem"),
 	}
-	local util, gused, gtotal, temp = gpu_line:match("(%d+),%s*(%d+),%s*(%d+),%s*(%d+)")
-	if util then
-		local g = (tonumber(util) :: number) / 100
-		local v = (tonumber(gused) :: number) / (tonumber(gtotal) :: number)
+	if g and v then
 		table.insert(out, { text = string.format("%d%% · %s°", math.floor(g * 100 + 0.5), temp), tone = level("m-gpu", g) })
+		table.insert(out, spark("gpu"))
 		table.insert(out, { text = string.format("%.1f/%.0fG", (tonumber(gused) :: number) / 1024, (tonumber(gtotal) :: number) / 1024), tone = level("m-vram", v) })
+		table.insert(out, spark("vram"))
 	else
 		table.insert(out, { text = "—", tone = "m-gpu" })
 		table.insert(out, { text = "—", tone = "m-vram" })
