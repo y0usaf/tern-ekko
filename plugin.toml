@@ -1,0 +1,8 @@
+schema = 1
+id = "ekko"
+name = "Ekko Keys"
+version = "0.1.0"
+description = "Ekko's pane verbs in Tern: recent-pane switcher, floating toggle, unseen-alert jumps, and Ekko's pane borders."
+icon = "layers"
+window = "window.luau"
+styles = ["ekko.css"]
