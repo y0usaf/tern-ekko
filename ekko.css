@@ -117,11 +117,14 @@ html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-plugin=
 /* The active card, as a chip. */
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='deck'],
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='deck-busy'] {
-	display: inline-flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	gap: 7px !important;
+	position: relative !important;
+	display: block !important;
 	align-self: center !important;
+	box-sizing: border-box !important;
+	max-width: 100% !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	text-align: center !important;
 	padding: 4px 11px 5px !important;
 	font-size: 10px !important;
 	letter-spacing: 0.1em !important;
@@ -134,13 +137,29 @@ html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='d
 
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='deck'] svg.ico,
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='deck-busy'] svg.ico {
+	display: inline-block !important;
 	width: 11px !important;
 	height: 11px !important;
+	margin-right: 7px !important;
+	vertical-align: -1px !important;
 	opacity: 0.75 !important;
 }
 
 html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='deck-busy'] {
+	padding-right: 24px !important;
 	color: var(--warn) !important;
+}
+
+html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='deck-busy']::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 11px;
+	width: 6px;
+	height: 6px;
+	margin-top: -3px;
+	border-radius: 50%;
+	background: currentColor;
 }
 
 /* The clock owns the rail. */

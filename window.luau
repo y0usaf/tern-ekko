@@ -347,9 +347,6 @@ local function deck_segment(pane: number?): StatusSegment?
 			local label = (t.name and t.name ~= "") and t.name or t.title
 			label = clip(label, 18)
 			local text = string.format("%d/%d %s", t.position, card_count, label)
-			if t.busy then
-				text = text .. " ●"
-			end
 			return {
 				text = text,
 				icon = "layers",
