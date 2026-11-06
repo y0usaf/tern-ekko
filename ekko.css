@@ -1,4 +1,4 @@
-html.tn-status footer#statusline {
+html:where(:not(.tn-phone)).tn-status footer#statusline {
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -14,40 +14,40 @@ html.tn-status footer#statusline {
 	overflow: hidden;
 }
 
-html.lay-rail.tabs-h.tn-status footer#statusline {
+html:where(:not(.tn-phone)).lay-rail.tabs-h.tn-status footer#statusline {
 	left: auto;
 }
 
-html.tn-status main#panel {
+html:where(:not(.tn-phone)).tn-status main#panel {
 	right: calc(var(--vt-room, var(--vt-w, var(--side))) * var(--tn-zoom, 1));
 	bottom: 0;
 }
 
-html.tn-status main#panel > div.tn-stage {
+html:where(:not(.tn-phone)).tn-status main#panel > div.tn-stage {
 	bottom: 0;
 }
 
-html.side-collapsed footer#statusline {
+html:where(:not(.tn-phone)).side-collapsed footer#statusline {
 	width: 0;
 }
 
-html.side-collapsed main#panel {
+html:where(:not(.tn-phone)).side-collapsed main#panel {
 	right: 0;
 }
 
-html.tn-status footer#statusline > *,
-html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin {
+html:where(:not(.tn-phone)).tn-status footer#statusline > *,
+html:where(:not(.tn-phone)).tn-status footer#statusline > span.sl-plugins > span.sl-plugin {
 	max-width: 100%;
 }
 
-html.tn-status footer#statusline > span.tb-sp,
-html.tn-status footer#statusline > span.sl-run,
-html.tn-status footer#statusline > span.sl-cwd,
-html.tn-status footer#statusline > span.sl-n {
+html:where(:not(.tn-phone)).tn-status footer#statusline > span.tb-sp,
+html:where(:not(.tn-phone)).tn-status footer#statusline > span.sl-run,
+html:where(:not(.tn-phone)).tn-status footer#statusline > span.sl-cwd,
+html:where(:not(.tn-phone)).tn-status footer#statusline > span.sl-n {
 	display: none;
 }
 
-html.tn-status footer#statusline > span.sl-plugins {
+html:where(:not(.tn-phone)).tn-status footer#statusline > span.sl-plugins {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
