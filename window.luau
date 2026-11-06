@@ -191,7 +191,7 @@ local function spark_css()
 		end
 		if n > 0 then
 			table.insert(rules, string.format(
-				"html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='spark-%s'] { background-image: %s, linear-gradient(var(--spark-track), var(--spark-track)) !important; background-size: %s, 100%% 1px !important; background-position: %s, 0 100%% !important; }",
+				"html.tn-status footer#statusline > span.sl-plugins > span.sl-plugin[data-tone='spark-%s'] { background-image: %s, linear-gradient(var(--spark-track), var(--spark-track)); background-size: %s, 100%% 1px; background-position: %s, 0 100%%; }",
 				key, table.concat(imgs, ", "), table.concat(sizes, ", "), table.concat(poss, ", ")))
 		end
 	end
