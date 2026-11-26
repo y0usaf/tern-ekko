@@ -147,6 +147,7 @@ local cpu_prev: { number }? = nil
 local net_prev: { number }? = nil
 local gpu_line = ""
 local gpu_busy = false
+local gpu_disabled = false
 local tick_gen = 0
 local TICK_MS = 500
 local function bucket(v: number): string
@@ -280,16 +281,20 @@ local function sample()
 end
 
 local function poll_gpu()
-	if gpu_busy then
+	if gpu_busy or gpu_disabled then
 		return
 	end
 	gpu_busy = true
-	tern.process.run({ "nvidia-smi", "--query-gpu=utilization.gpu,memory.used,memory.total,temperature.gpu", "--format=csv,noheader,nounits" }, function(result)
+	local ok = pcall(tern.process.run, { "nvidia-smi", "--query-gpu=utilization.gpu,memory.used,memory.total,temperature.gpu", "--format=csv,noheader,nounits" }, function(result)
 		gpu_busy = false
 		if result.status == 0 then
 			gpu_line = result.stdout
 		end
 	end)
+	if not ok then
+		gpu_busy = false
+		gpu_disabled = true
+	end
 end
 
 local cards: { TabInfo } = {}
@@ -385,8 +390,6 @@ tern.on("window_start", function(cx: WindowCx)
 	snapshot_cards(cx)
 end)
 
-tick_gen += 1
-tick(tick_gen)
 
 tern.on("focus", function(ev: any, cx: WindowCx?)
 	cards_event(ev, cx)
@@ -702,3 +705,6 @@ for i, b in ipairs(binder) do
 		end,
 	})
 end
+
+tick_gen += 1
+tick(tick_gen)
